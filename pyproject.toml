@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools >= 61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chess_tools"
+description = "Project focused on developing a set of chess-related tools."
+readme = "README.md"
+requires-python = ">= 3.9"
+license = { text = "MIT License" }
+keywords = ["Chess"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+dependencies = [
+    # "numpy",
+    # "pygame>=2.1.0",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+
+dev = [
+    "ruff",
+    "pytest",
+    "pre-commit",
+    "pytest-cov",
+    "tox",
+    "reorder-python-imports",
+    "mypy"
+]
+
+[project.urls]
+repository = "https://github.com/aciriano/ChessTools"
+
+[tool.setuptools.dynamic]
+version = {attr = "chess_tools.__version__"}
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["chess_tools", "chess_tools.*"]
+
+[tool.setuptools.package-data]
+chess_tools = [
+    "wilson/icons/*.png"
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "unit: unitary tests to verify local functionalities.",
+    "end2end: tests that represent interactions and complete experiments.",
+    "example: tests that reproduce use cases.",
+    "slow: tests that require more time to be executed."
+]
+testpaths = "tests"
+addopts = "-m 'not slow' --cov=chess_tools --cov-report=html --disable-warnings -vv"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
