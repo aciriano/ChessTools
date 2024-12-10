@@ -57,19 +57,56 @@ class Square:
         """
         return f"{'abcdefgh'[self.col - 1]}{self.row}"
 
+    @cached_property
+    def icon(self) -> str:
+        """
+        Determines a visual representation of the square based on its color.
+
+        Returns:
+            str: A Unicode character representing the square's color.
+        """
+        return "◻" if self.color is Color.WHITE else "◼"
+
 
 @dataclass
 class Board:
+    """
+    Represents a chessboard with a given dimension and manages the placement
+    of chess pieces on its squares.
+
+    Attributes:
+        dimension (int): The size of the chessboard (e.g., 8 for an 8x8 board).
+        squares (dict[Square, ChessPiece]): A mapping of squares to the chess pieces
+            currently occupying them. This is initialized as an empty dictionary.
+    """
+
     dimension: int
     squares: dict[Square, ChessPiece] = field(init=False)
 
     def __post_init__(self) -> None:
+        """
+        Validates the board's dimension and initializes the squares dictionary.
+
+        Raises:
+            ChessToolsException: If the dimension is not a positive integer.
+        """
         if not isinstance(self.dimension, int) or self.dimension < 1:
             raise ChessToolsException(f"Value {self.dimension} is not valid as board dimension.")
         else:
             self.squares = dict()
 
     def put(self, piece: ChessPiece, square: Square) -> None:
+        """
+        Places a chess piece on the specified square.
+
+        Args:
+            piece (ChessPiece): The chess piece to place on the board.
+            square (Square): The square where the piece will be placed.
+
+        Raises:
+            TypeError: If `piece` is not a ChessPiece or `square` is not a Square.
+            ChessToolsException: If the square is already occupied.
+        """
         if not isinstance(piece, ChessPiece) or not isinstance(square, Square):
             raise TypeError(
                 f"{self.__class__.__name__}: put function expects a ChessPiece and a "
@@ -81,6 +118,16 @@ class Board:
             self.squares[square] = piece
 
     def remove(self, square: Square) -> None:
+        """
+        Removes the chess piece from the specified square.
+
+        Args:
+            square (Square): The square from which to remove the piece.
+
+        Raises:
+            TypeError: If `square` is not a Square.
+            ChessToolsException: If the square is not occupied.
+        """
         if not isinstance(square, Square):
             raise TypeError(
                 f"{self.__class__.__name__}: remove function expects a Square object. "

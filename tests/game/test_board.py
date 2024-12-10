@@ -38,6 +38,11 @@ class TestSquare:
         """Test the color calculation for different positions."""
         assert Square(col=col, row=row).color == expected
 
+    @pytest.mark.parametrize("row, col, expected", [(1, 1, "◼"), (1, 2, "◻")])
+    def test_icon(self, row: int, col: int, expected: Color):
+        """Test the color calculation for different positions."""
+        assert Square(col=col, row=row).icon == expected
+
     @pytest.mark.parametrize("col, row, notation", [(1, 1, "a1"), (8, 1, "h1"), (7, 7, "g7")])
     def test_notation(self, col: int, row: int, notation: str) -> None:
         """Test the algebraic notation representation of Square."""
@@ -48,8 +53,9 @@ class MockPiece(ChessPiece):
     def __init__(self, color: Color):
         super().__init__(value=0.0, symbol="M", color=color)
 
-    def get_moves(self) -> list:
-        return []
+    @property
+    def icon(self) -> str:
+        return ""
 
 
 class TestBoard:
